@@ -2,10 +2,22 @@ import pygame
 import sys
 import random
 
-class snake(object):
+UP = (0, -1)
+DOWN = (0, 1)
+LEFT = (-1, 0)
+RIGHT = (1, 0)
+
+SCREEN_WIDTH = 480
+SCREEN_HEIGHT = 480
+
+GRIDSIZE = 20
+GRID_WIDTH = SCREEN_HEIGHT / GRIDSIZE
+GRID_HEIGHT = SCREEN_WIDTH / GRIDSIZE
+
+class Snake():
     def __init__(self):
         self.length = 1
-        self.position = [((SCREEN_WIDTH / 2)(SCREEN_HEIGHT /2))]
+        self.position = [((SCREEN_WIDTH / 2),(SCREEN_HEIGHT //2))]
         self.direction = random.choice([UP,DOWN,LEFT,RIGHT])    
         self.color = (17, 24, 47)
 
@@ -13,7 +25,7 @@ class snake(object):
         return self.position[0]
 
     def turn(self, point):
-        if self.lenght > 1 and (point[0] * -1, point[1]* -1) == self.direction:
+        if self.length > 1 and (point[0] * -1, point[1]* -1) == self.direction:
             return
         else:
             self.direction = point
@@ -31,12 +43,13 @@ class snake(object):
 
     def reset(self):
         self.length = 1
-        self.positions = [((SCREEN_WIDTH / 2),(SCREEN_HEIGHT /2))]
+        self.position = [((SCREEN_WIDTH / 2),(SCREEN_HEIGHT /2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
 
     def draw(self, surface):
+        #print(self.position)
         for p in self.position:
-            r = pygame.Rect((p[0], p[1], (GRIDSIZE, GRIDSIZE)))
+            r = pygame.Rect(p, (GRIDSIZE, GRIDSIZE))
             pygame.draw.rect(surface, self.color, r)
             pygame.draw.rect(surface, (93, 216, 228), r, 1)
 
@@ -56,7 +69,7 @@ class snake(object):
                 elif event.key == pygame.K_RIGHT:
                     self.turn(RIGHT)
                 
-class food(object):
+class Food(object):
     def __init__(self):
         self.position = (0 ,0)
         self.color = (223, 163, 49)
@@ -82,17 +95,9 @@ def drawGrid(surface):
                 pygame.draw.rect(surface,(84, 194, 205 ), rr)
 
 
-SCREEN_WIDTH = 480
-SCREEN_HEIGHT = 480
 
-GRIDSIZE = 20
-GRID_WIDTH = SCREEN_HEIGHT / GRIDSIZE
-GRID_HEIGHT = SCREEN_WIDTH / GRIDSIZE
 
-UP = (0, -1)
-DOWN = (0, 1)
-LEFT = (-1, 0)
-RIGHT = (1, 0)
+
 
 def main():
     pygame.init()
@@ -101,13 +106,13 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT),0, 32)
 
     surface = pygame.Surface(screen.get_size())
-    surface = surface.convent()
+   #surface=surface.convent()
     drawGrid(surface)
 
-    snake = snake()
-    food = food()
+    snake = Snake()
+    food = Food()
 
-    score: 0
+    score= 0
     while (True):
         clock.tick(10)
         snake.handle_keys()
@@ -120,8 +125,8 @@ def main():
         snake.draw(surface)
         food.draw(surface)
         screen.blit(surface, (0 , 0))
-        text = myfont.render("Score {0}".format(score), 1,(0, 0, 0))
-        screen.blit(text,(5, 10))
+        #text = myfont.render("Score {0}".format(score), 1,(0, 0, 0))
+        #screen.blit(text,(5, 10))
         pygame.display.update()
 
 main()
